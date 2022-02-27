@@ -13,7 +13,7 @@ This document specifies are more general and extensible element for specifiying 
 
 ## Usage
 
-```
+```xml
 <thumbnail type="blurhash" xmlns="urn:xmpp:thumbnail:0">
 	<payload>LEHV6nWB2yk8pyoJadR*.7kCMdnj</payload>
 </thumbnail>
@@ -53,7 +53,7 @@ the blurhash data from growing to large in order to prevent hitting the stanza s
 
 NOTE: This example is taken from [Stateless Inline Media Sharing](https://xmpp.org/extensions/xep-0385.html) and modified for this protocol.
 
-```
+```xml
 <message to='julient@shakespeare.lit' from='romeo@montague.lit'>
   <body>Look at the nice view from the summit.</body>
   <reference xmlns='urn:xmpp:reference:0' begin='17' end='20' type='data'>
