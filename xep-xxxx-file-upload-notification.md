@@ -13,13 +13,13 @@ that will be replaced once the file has been uploaded.
 
 ```xml
 <message from="some.user@some.server/abc123" to="someone.else@other.server" id="aaaaa">
-  <file-upload xmlns="urn:xmpp:fun:0">
+  <file-upload xmlns="proto:urn:xmpp:fun:0">
     <file xmlns="urn:xmpp:file:metadata:0">
 	  <name>vacation.jpg</name>	
 	  <media-type>image/jpeg</media-type>
 	</file>
-	<thumbnail type="blurhash" xmlns="urn:xmpp:thumbnail:0">
-	  <payload>LEHV6nWB2yk8pyoJadR*.7kCMdnj</payload>
+	<thumbnail type="proto:urn:xmpp:file-thumbnails:0:blurhash" xmlns="proto:urn:xmpp:file-thumbnails:0">
+	  <blurhash>LEHV6nWB2yk8pyoJadR*.7kCMdnj</blurhash>
 	</thumbnail>
   </file-upload>
   <origin-id xmlns="urn:xmpp:sid:0" id="ccccc" />
@@ -32,7 +32,7 @@ file embed once the upload is done. Metadata about the file should be included
 as specified by [File metadata element](https://xmpp.org/extensions/xep-0446.html).
 The metadata should include only the bare minimum, i.e. the mime type and filename.
 Additionally, a thumbnail can be sent with the notification in order to allow clients
-to already show a preview. The `<thumbnail />` element is specified by [Thumbnails](https://github.com/PapaTutuWawa/custom-xeps/blob/master/xep-xxxx-thumbnails.md).
+to already show a preview. The `<file-thumbnail />` element is specified by [File Thumbnails](https://github.com/PapaTutuWawa/custom-xeps/blob/master/xep-xxxx-file-thumbnails.md).
 
 Note that [Unique and Stable Origin IDs](https://xmpp.org/extensions/xep-0359.html) must be used when the message is sent to a
 groupchat.
@@ -51,7 +51,7 @@ in the message to inform clients which messages should be replaced.
   <x xmlns="jabber:x:oob">
 	<url>...</url>
   </x>
-  <replaces xmlns="urn:xmpp:fun:0" id="ccccc" />
+  <replaces xmlns="proto:urn:xmpp:fun:0" id="ccccc" />
   <origin-id xmlns="urn:xmpp:sid:0" id="ddddd" />
 </message>
 ```
@@ -66,8 +66,21 @@ method allows a client to show it inline. Examples for such methods are
 [Out of Band Data](https://xmpp.org/extensions/xep-0066.html)
 and [Stateless Inline Media Sharing](https://xmpp.org/extensions/xep-0385.html).
 
+In case the sender uses methods like [Stateless Inline Media Sharing](https://xmpp.org/extensions/xep-0385.html)
+or [Stateless File Sharing](https://xmpp.org/extensions/xep-0447.html) which allow specifying
+a thumbnail, then the client should do here as well to allow clients catching up using
+[Message Archive Management](https://xmpp.org/extensions/xep-0313.html) to also provide a thumbnail to their users.
+
 ## Security Considerations
 
 A client receiveing a message with an `<replaces />` element must verify if the message it
 is supposed to replace was actually sent by the sender of the `<replaces />` element to
 prevent arbitrary messages to be replaced.
+
+## Info
+
+| Key | Value |
+| --- | --- |
+| Author | PapaTutuWawa |
+| Version | 0.0.2 |
+| Short name | fun |
