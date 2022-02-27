@@ -45,7 +45,7 @@ If a sender specifies the type to be of `proto:urn:xmpp:file-thumbnails:0:blurha
 image data as specified by the [Blurhash](https://github.com/woltapp/blurhash) algorithm. Care should be taken to prevent
 the blurhash data from growing to large in order to prevent hitting the stanza size limit.
 
-### Jingle Content Thumbnail Compatability
+#### Jingle Content Thumbnail Compatability
 
 If a sender specified the type to be of `proto:urn:xmpp:file-thumbnails:0:jct`, then the `<file-thumbnail />`
 element must contain exactly one `<thumbnail xmlns="urn:xmpp:thumbs:1" />` element.
