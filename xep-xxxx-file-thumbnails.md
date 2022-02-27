@@ -67,9 +67,7 @@ NOTE: This example is taken from [Stateless Inline Media Sharing](https://xmpp.o
         <hash xmlns='urn:xmpp:hashes:2' algo='id-blake2b256'>2AfMGH8O7UNPTvUVAM9aK13mpCY=</hash>
         <desc>Photo from the summit.</desc>
         <file-thumbnail type="proto:proto:urn:xmpp:file-thumbnails:0:jct" xmlns='urn:xmpp:thumbnail:0'>
-		  	<payload>
-				<thumbnail xmlns='urn:xmpp:thumbs:1'uri='cid:sha1+ffd7c8d28e9c5e82afea41f97108c6b4@bob.xmpp.org' media-type='image/png' width='128' height='96'/>
-			</payload>
+			<thumbnail xmlns='urn:xmpp:thumbs:1'uri='cid:sha1+ffd7c8d28e9c5e82afea41f97108c6b4@bob.xmpp.org' media-type='image/png' width='128' height='96'/>
 		</thumbnail>
         <file-thumbnail type="proto:urn:xmpp:file-thumbnails:0:blurhash" xmlns='proto:urn:xmpp:file-thumbnails:0'>
 		  	<blurhash>LEHV6nWB2yk8pyoJadR*.7kCMdnj</blurhash>
