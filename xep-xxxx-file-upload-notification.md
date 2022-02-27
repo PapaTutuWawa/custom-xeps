@@ -18,9 +18,8 @@ that will be replaced once the file has been uploaded.
 	  <name>vacation.jpg</name>	
 	  <media-type>image/jpeg</media-type>
 	</file>
-	<thumbnail xmlns="urn:xmpp:thumbnail:0">
-	  <type>blurhash</type>
-	  <payload></payload>
+	<thumbnail type="blurhash" xmlns="urn:xmpp:thumbnail:0">
+	  <payload>LEHV6nWB2yk8pyoJadR*.7kCMdnj</payload>
 	</thumbnail>
   </file-upload>
   <origin-id xmlns="urn:xmpp:sid:0" id="ccccc" />
@@ -33,7 +32,7 @@ file embed once the upload is done. Metadata about the file should be included
 as specified by [File metadata element](https://xmpp.org/extensions/xep-0446.html).
 The metadata should include only the bare minimum, i.e. the mime type and filename.
 Additionally, a thumbnail can be sent with the notification in order to allow clients
-to already show a preview.
+to already show a preview. The `<thumbnail />` element is specified by [Thumbnails](https://github.com/PapaTutuWawa/custom-xeps/blob/master/xep-xxxx-thumbnails.md).
 
 Note that [Unique and Stable Origin IDs](https://xmpp.org/extensions/xep-0359.html) must be used when the message is sent to a
 groupchat.
