@@ -34,7 +34,7 @@ The `<file-upload>` element indicates that a message should be replaced with the
 file embed once the upload is done. Metadata about the file should be included
 as specified by [File metadata element](https://xmpp.org/extensions/xep-0446.html).
 The metadata should include only the bare minimum, i.e. the mime type and filename.
-Additionally, one or more thumbnails can be sent with the notification in order to allow clients
+Additionally, zero or more thumbnails can be sent with the notification in order to allow clients
 to already show a preview. The `<file-thumbnail />` element is specified by [File Thumbnails](https://github.com/PapaTutuWawa/custom-xeps/blob/master/xep-xxxx-file-thumbnails.md).
 
 Note that [Unique and Stable Origin IDs](https://xmpp.org/extensions/xep-0359.html) must be used when the message is sent to a
@@ -85,5 +85,5 @@ prevent arbitrary messages to be replaced.
 | Key | Value |
 | --- | --- |
 | Author | PapaTutuWawa |
-| Version | 0.0.3 |
+| Version | 0.0.4 |
 | Short name | fun |
