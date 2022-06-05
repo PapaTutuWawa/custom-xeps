@@ -74,6 +74,22 @@ or [Stateless File Sharing](https://xmpp.org/extensions/xep-0447.html) which all
 a thumbnail, then the client should do here as well to allow clients catching up using
 [Message Archive Management](https://xmpp.org/extensions/xep-0313.html) to also provide a thumbnail to their users.
 
+## Cancelled Upload
+
+If the uploading entity has cancelled the upload, then it should indicate so to the other communicating entities.
+
+```xml
+<message from="some.user@some.server/abc123" to="someone.else@other.server" id="bbbbb">
+  <cancelled xmlns="proto:urn:xmpp:fun:0" />
+  <replaces xmlns="proto:urn:xmpp:fun:0" id="ccccc" />
+  <origin-id xmlns="urn:xmpp:sid:0" id="ddddd" />
+</message>
+```
+
+In this example, the uploading entity just sends a message containing a `<cancelled />` tag to indicate the
+cancellation, allowing receiving clients to perhaps stop showing loading spinners and the like. The
+`<replaces />` is used to indicate what original message this cancellation applies to.
+
 ## Security Considerations
 
 A client receiveing a message with an `<replaces />` element must verify if the message it
