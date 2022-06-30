@@ -1,4 +1,4 @@
-# File Thumbnails
+# Extensible File Thumbnails
 ## Introduction
 
 When sending media, it is often helpful for users when a thumbnail can be shown before the
@@ -9,72 +9,45 @@ However, this protocol requires that the thumbnail is a base64-encoded image pub
 [Bits of Binary](https://xmpp.org/extensions/xep-0231.html). This prevents clients from implementing newer technologies, such as
 [Blurhash](https://github.com/woltapp/blurhash).
 
-This document specifies are more general and extensible element for specifiying thumbnails.
+This document specifies are more general and extensible element for specifiying thumbnails in various formats.
 
 ## Usage
 
 ```xml
-<file-thumbnail type="blurhash" xmlns="proto:urn:xmpp:file-thumbnails:0">
-	<blurhash>LEHV6nWB2yk8pyoJadR*.7kCMdnj</blurhash>
-</thumbnail>
+<file-thumbnails xmlns="proto:urn:xmpp:eft:0">
+	<blurhash xmlns="proto:urn:xmpp:eft:blurhash">LEHV6nWB2yk8pyoJadR*.7kCMdnj</blurhash>
+</file-thumbnails>
 ```
 
-In this example, the thumbnail is specified of type `proto:urn:xmpp:file-thumbnails:0:blurhash`, which means that a supporting
-client should decode the `<blurhash/>` element using the [Blurhash](https://github.com/woltapp/blurhash) algorithm.
-
-Other extensions may define similar types. Note that the content of the `<file-thumbnail />` element
-is dependent on the type specified in the `<file-thumbnail />` element.
+In this example, the thumbnail contains only a blurhash thumbnail, indicated by the `<blurhash/>` element, but an implementation
+may add more versions of the same thumbnail, i.e. another `<base64-bob/>` element as a fallback if a client does not support
+blurhash. To prevent confusion in the display of a thumbnail, all children of `<file-thumbnail />` must describe a thumbnail
+for the same file.
 
 ### Thumbnail Types
 #### Blurhash
 
-If a sender specifies the type to be of `blurhash`, then the `<file-thumbnail />` element must contain the
-image data as specified by the [Blurhash](https://github.com/woltapp/blurhash) algorithm. Care should be taken to prevent
-the blurhash data from growing to large in order to prevent hitting the stanza size limit.
+If a sender includes a `<blurhash/>` inside the `<file-thumbnail/>` element, then it must be interpreted as
+[Blurhash](https://github.com/woltapp/blurhash) data. As a sender, care must be taken to not make the Blurhash
+thumbnail too big as to not loose the advantages of blurhash.
 
 ```xml
-<file-thumbail xmlns="proto:urn:xmpp:file-thumbnails:0" type="blurhash">
-	<blurhash>LEHV6nWB2yk8pyoJadR*.7kCMdnj</blurhash>
-</file-thumbnail>
+<file-thumbails xmlns="proto:urn:xmpp:eft:0">
+	<blurhash xmlns="proto:urn:xmpp:eft:blurhash">LEHV6nWB2yk8pyoJadR*.7kCMdnj</blurhash>
+</file-thumbnails>
 ```
 
 #### Jingle Content Thumbnail Compatability
 
-In order to enable a pseudo-interoperability with [Jingle Content Thumbnails](https://xmpp.org/extensions/xep-0264.html), a type
-`base64-bob` is defined.
-
-If a sender specified the type to be of `base64-bob`, then the `<file-thumbnail />`
-element must contain exactly one `<base64-bob />` element. The attributes of the element are the same
-as the `<thumbnail />` element specified in [Jingle Content Thumbnails](https://xmpp.org/extensions/xep-0264.html).
+In order to enable a pseudo-interoperability with [Jingle Content Thumbnails](https://xmpp.org/extensions/xep-0264.html), inclusion of a
+`<thumbnail/>` element is allowed. This is to allow easy reuse of an already existent [Jingle Content Thumbnails](https://xmpp.org/extensions/xep-0264.html)
+implementation.
 
 ```xml
-<file-thumbail xmlns="proto:urn:xmpp:file-thumbnails:0" type="base64-bob">
-	<base64-bob uri="cid:sha1+...@bob.xmpp.org" media-type="image/png" width="128" height="96" />
-</file-thumbnail>
+<file-thumbails xmlns="proto:urn:xmpp:eft:0" type="base64-bob">
+	<thumbnail xmlns="urn:xmpp:thumbs:1" uri="cid:sha1+...@bob.xmpp.org" media-type="image/png" width="128" height="96" />
+</file-thumbnails>
 ```
-
-This allows clients that already support [Jingle Content Thumbnails](https://xmpp.org/extensions/xep-0264.html) to reuse
-the same logic they use for retrieving thumbnail data.
-
-#### Base64 Data
-
-If a sender specified the type to be of `base64`, then the `<file-thumbnail />` element must
-contain exactly one `<base64 />` element. The element must posess an `media-type` attribute, whose value
-contains the mime type of the thumbnail data, while the inner text of the element contains the base64-encoded
-binary thumbnail data.
-
-```xml
-<file-thumbail xmlns="proto:urn:xmpp:file-thumbnails:0" type="base64">
-	<base64 media-type="image/png" width="128" height="96">
-		[base64 data]
-	</base64>
-</file-thumbnail>
-```
-
-Note that this thumbnail type is essentially the same as the `base64-bob` type, but allowing the thumbnail to be used even if
-the sender is not available on a server that does not cache [Bits of Binary](https://xmpp.org/extensions/xep-0231.html) data or has it otherwise not available.
-
-If using this thumbnail type, care has to be taken in order to not hit any existing stanza size limits.
 
 ## Usage Example with Stateless Inline Media Sharing
 
@@ -95,9 +68,14 @@ NOTE: This example is taken from [Stateless Inline Media Sharing](https://xmpp.o
         <file-thumbnail type="base64-bob" xmlns='urn:xmpp:thumbnail:0'>
 			<base64-bob uri="cid:sha1+ffd7c8d28e9c5e82afea41f97108c6b4@bob.xmpp.org" media-type="image/png" width="128" height="96" />
 		</thumbnail>
-        <file-thumbnail type="blurhash" xmlns="proto:urn:xmpp:file-thumbnails:0">
-		  	<blurhash>LEHV6nWB2yk8pyoJadR*.7kCMdnj</blurhash>
-		</thumbnail>
+        <file-thumbnails xmlns="proto:urn:xmpp:eft:0">
+		  	<blurhash xmlns="proto:urn:xmpp:eft:blurhash">LEHV6nWB2yk8pyoJadR*.7kCMdnj</blurhash>
+			<thumbnail xmlns='urn:xmpp:thumbs:1'
+                       uri='cid:sha1+ffd7c8d28e9c5e82afea41f97108c6b4@bob.xmpp.org'
+                       media-type='image/png'
+                       width='128'
+                       height='96'/>
+		</file-thumbnails>
       </file>
       <sources>
         <reference xmlns='urn:xmpp:reference:0' type='data' uri='https://download.montague.lit/4a771ac1-f0b2-4a4a-9700-f2a26fa2bb67/summit.jpg' />
@@ -112,9 +90,24 @@ NOTE: This example is taken from [Stateless Inline Media Sharing](https://xmpp.o
 
 The same considerations apply as specified by [Jingle Content Thumbnails](https://xmpp.org/extensions/xep-0264.html).
 
+## Todo
+
+- Change XML namespace from `proto:urn:xmpp:eft:0` to `urn:xmpp:eft:0` once accepted as an experimental XEP
+
+## Changelog
+### 0.1.0
+
+- Remove the base64 thumbnail type
+- Namespace all thumbnail types
+- Remove the type attribute of <file-thumbnail/>
+- Rename <file-thumbnail/> to <file-thumbnails/>
+- Rename the namespace from file-thumbnails to eft
+- Rename from File Thumbnails to Extensible File Thumbnails
+
 ## Info
 
 | Key | Value |
 | --- | --- |
 | Author | PapaTutuWawa |
-| Version | 0.0.3 |
+| Version | 0.1.0 |
+| Short name | eft |
