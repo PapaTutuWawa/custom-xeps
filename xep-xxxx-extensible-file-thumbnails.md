@@ -92,15 +92,15 @@ The same considerations apply as specified by [Jingle Content Thumbnails](https:
 
 ## Todo
 
-- Change XML namespace from `proto:urn:xmpp:eft:0` to `urn:xmpp:eft:0` once accepted as an experimental XEP
+- Change XML namespace from `proto:urn:xmpp:eft:0` to `urn:xmpp:eft:0` once we submit this as an XEP
 
 ## Changelog
 ### 0.1.0
 
 - Remove the base64 thumbnail type
 - Namespace all thumbnail types
-- Remove the type attribute of <file-thumbnail/>
-- Rename <file-thumbnail/> to <file-thumbnails/>
+- Remove the type attribute of `<file-thumbnail/>`
+- Rename `<file-thumbnail/>` to `<file-thumbnails/>`
 - Rename the namespace from file-thumbnails to eft
 - Rename from File Thumbnails to Extensible File Thumbnails
 
