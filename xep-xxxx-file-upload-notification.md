@@ -13,20 +13,19 @@ that will be replaced once the file has been uploaded.
 
 ```xml
 <message from="some.user@some.server/abc123" to="someone.else@other.server" id="aaaaa">
-	<file-upload xmlns="proto:urn:xmpp:fun:0">
-		<file xmlns="urn:xmpp:file:metadata:0">
-			<name>vacation.jpg</name>	
-			<media-type>image/jpeg</media-type>
-		</file>
-		<thumbnail type="blurhash" xmlns="proto:urn:xmpp:file-thumbnails:0">
-			<blurhash>LEHV6nWB2yk8pyoJadR*.7kCMdnj</blurhash>
-		</thumbnail>
-		<thumbnail type="base64-bob" xmlns="proto:urn:xmpp:file-thumbnails:0">
-			<base64-bob uri="cid:sha1+...@bob.xmpp.org" media-type="image/png" width="128" height="96" />
-		</thumbnail>
-	</file-upload>
-	<origin-id xmlns="urn:xmpp:sid:0" id="ccccc" />
-	<no-permanent-store xmlns="urn:xmpp:hints" />
+    <file-upload xmlns="proto:urn:xmpp:fun:0">
+        <file xmlns="urn:xmpp:file:metadata:0">
+            <name>vacation.jpg</name>	
+            <media-type>image/jpeg</media-type>
+            <thumbnail type="blurhash" xmlns="proto:urn:xmpp:eft:0">
+                <blurhash>LEHV6nWB2yk8pyoJadR*.7kCMdnj</blurhash>
+            </thumbnail>
+            <thumbnail type="base64-bob" xmlns="proto:urn:xmpp:eft:0">
+                <base64-bob uri="cid:sha1+...@bob.xmpp.org" media-type="image/png" width="128" height="96" />
+            </thumbnail>
+        </file>
+    </file-upload>
+    <no-permanent-store xmlns="urn:xmpp:hints" />
 </message>
 ```
 
@@ -36,9 +35,6 @@ as specified by [File metadata element](https://xmpp.org/extensions/xep-0446.htm
 The metadata should include only the bare minimum, i.e. the mime type and filename.
 Additionally, zero or more thumbnails can be sent with the notification in order to allow clients
 to already show a preview. The `<file-thumbnail />` element is specified by [File Thumbnails](https://github.com/PapaTutuWawa/custom-xeps/blob/master/xep-xxxx-file-thumbnails.md).
-
-Note that [Unique and Stable Origin IDs](https://xmpp.org/extensions/xep-0359.html) must be used when the message is sent to a
-groupchat.
 
 Since this message carries no meaning to anyone retrieving it after the file upload has been
 completed, a `<no-permanent-store />` element should be added (See [Message Processing Hints](https://xmpp.org/extensions/xep-0334.html)).
@@ -54,17 +50,14 @@ in the message to inform clients which messages should be replaced.
   <x xmlns="jabber:x:oob">
 	<url>...</url>
   </x>
-  <replaces xmlns="proto:urn:xmpp:fun:0" id="ccccc" />
-  <origin-id xmlns="urn:xmpp:sid:0" id="ddddd" />
+  <replaces xmlns="proto:urn:xmpp:fun:0" id="aaaaa" />
 </message>
 ```
 
-The `id` attribute of the `<replaces />` element refers to either the stanza ID or the
-origin ID of the message that contained the original `<file-upload />`.
+The `id` attribute of the `<replaces />` element refers to either the stanza ID of the
+message that contained the original `<file-upload />`.
 
-If sent to a groupchat, the origin ID must be used.
-
-Note the the actual method of communicating a file is of no relevance here, as long as the
+Note that the actual method of communicating a file is of no relevance here, as long as the
 method allows a client to show it inline. Examples for such methods are
 [Out of Band Data](https://xmpp.org/extensions/xep-0066.html)
 and [Stateless Inline Media Sharing](https://xmpp.org/extensions/xep-0385.html).
@@ -80,26 +73,24 @@ If the uploading entity has cancelled the upload, then it should indicate so to 
 
 ```xml
 <message from="some.user@some.server/abc123" to="someone.else@other.server" id="bbbbb">
-  <cancelled xmlns="proto:urn:xmpp:fun:0" />
-  <replaces xmlns="proto:urn:xmpp:fun:0" id="ccccc" />
-  <origin-id xmlns="urn:xmpp:sid:0" id="ddddd" />
+  <cancelled xmlns="proto:urn:xmpp:fun:0" id="aaaaa" />
 </message>
 ```
 
 In this example, the uploading entity just sends a message containing a `<cancelled />` tag to indicate the
-cancellation, allowing receiving clients to perhaps stop showing loading spinners and the like. The
-`<replaces />` is used to indicate what original message this cancellation applies to.
+cancellation, allowing receiving clients to perhaps stop showing loading spinners and the
+like. Its `id` attribute refers to the message containing the original `<file-upload />`
+element.
 
 ## Security Considerations
 
-A client receiveing a message with an `<replaces />` element must verify if the message it
-is supposed to replace was actually sent by the sender of the `<replaces />` element to
-prevent arbitrary messages to be replaced.
+- A client receiving a File Upload Notification must ensure that only messages containing a `<file-upload />` are replaced. This is to ensure arbitrary messages being replaced by file uploads.
+- A client receiving a File Upload Notification MUST ensure that replacements and cancellations are only accepted from the JID that sent the original message containing the `<file-upload />` element. This means that as long as the two JIDs are equal when bare, then the replacement or cancellation is valid.
 
 ## Info
 
 | Key | Value |
 | --- | --- |
 | Author | PapaTutuWawa |
-| Version | 0.0.4 |
+| Version | 0.0.5 |
 | Short name | fun |
