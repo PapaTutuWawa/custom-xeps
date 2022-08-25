@@ -15,12 +15,15 @@ This document specifies are more general and extensible element for specifiying 
 
 ```xml
 <file-thumbnail type="proto:urn:xmpp:eft:0:blurhash" xmlns="proto:urn:xmpp:eft:0">
-	<blurhash xmlns="proto:urn:xmpp:eft:0:blurhash">LEHV6nWB2yk8pyoJadR*.7kCMdnj</blurhash>
+	<blurhash>LEHV6nWB2yk8pyoJadR*.7kCMdnj</blurhash>
 </file-thumbnail>
 ```
 
 This example specifies a thumbnail of type `blurhash`, meaning that the child element of the
 `<file-thumbnail/>` element must contain a `<blurhash/>` element (See "Thumbnail Types").
+
+A `<file-thumbnail/>` element MUST only contain one child; that is the child that is specified
+by the `<file-thumbnail/>` type attribute.
 
 ### Thumbnail Types
 #### Blurhash
@@ -32,7 +35,7 @@ not make the Blurhash thumbnail too big as to not loose the advantages of Blurha
 
 ```xml
 <file-thumbail xmlns="proto:urn:xmpp:eft:0">
-	<blurhash xmlns="proto:urn:xmpp:eft:0:blurhash">LEHV6nWB2yk8pyoJadR*.7kCMdnj</blurhash>
+	<blurhash>LEHV6nWB2yk8pyoJadR*.7kCMdnj</blurhash>
 </file-thumbnail>
 ```
 
@@ -68,7 +71,7 @@ NOTE: This example is taken from [Stateless Inline Media Sharing](https://xmpp.o
                     <base64-bob uri="cid:sha1+ffd7c8d28e9c5e82afea41f97108c6b4@bob.xmpp.org" media-type="image/png" width="128" height="96" />
                 </thumbnail>
                 <file-thumbnail type="proto:urn:xmpp:eft:0:blurhash" xmlns="proto:urn:xmpp:eft:0">
-                    <blurhash xmlns="proto:urn:xmpp:eft:blurhash">LEHV6nWB2yk8pyoJadR*.7kCMdnj</blurhash>
+                    <blurhash>LEHV6nWB2yk8pyoJadR*.7kCMdnj</blurhash>
                 </file-thumbnail>
                 <file-thumbnail type="proto:urn:xmpp:eft:0:base64-bob" xmlns="proto:urn:xmpp:eft:0">
                     <thumbnail xmlns='urn:xmpp:thumbs:1'
@@ -96,6 +99,10 @@ The same considerations apply as specified by [Jingle Content Thumbnails](https:
 - Change XML namespace from `proto:urn:xmpp:eft:0` to `urn:xmpp:eft:0` once we submit this as an XEP
 
 ## Changelog
+### 0.2.1
+
+- Remove namespacing of the `<file-thumbnail/>`'s child element
+
 ### 0.2.0
 
 - Namespace the thumbnail type
@@ -115,5 +122,5 @@ The same considerations apply as specified by [Jingle Content Thumbnails](https:
 | Key | Value |
 | --- | --- |
 | Author | PapaTutuWawa |
-| Version | 0.2.0 |
+| Version | 0.2.1 |
 | Short name | eft |
