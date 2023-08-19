@@ -93,7 +93,7 @@ Each extension item inside the `<group />` must also carry an id. The id must be
 A community has a single `proto:urn:xmpp:community:0:groups` [PubSub](https://xmpp.org/extensions/xep-0060.html) node that contains one top-level group called the *root group*. It MAY have a title, but it does not
 have to.
 
-```
+```xml
 <iq type="result" from="community.example.org">
   <pubsub xmlns="http://jabber.org/protocol/pubsub">
     <items node="proto:urn:xmpp:community:0:groups">
