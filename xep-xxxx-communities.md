@@ -15,7 +15,7 @@ To aid adoption, the following requirements are considered while creating this X
 
 ## Basics
 
-A community in XMPP is identified by a JID that "owns" the community. This may be a end-user JID or a server JID. This JID must provide
+A community in XMPP is identified by a JID that "owns" the community. This may be a bare JID or a server's JID. This JID must provide
 a [PubSub](https://xmpp.org/extensions/xep-0060.html) service on which the community's metadata is stored. This XEP proposes a couple of basic nodes, but other XEPs may extend
 this set and provide custom extensions.
 
