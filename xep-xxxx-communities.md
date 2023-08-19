@@ -140,6 +140,77 @@ have to.
 </iq>
 ```
 
+## State Synchronization (Maybe new XEP?)
+
+There may be some state that should be synchronized across different channels, like ban lists, ACLs, hats, and so on. To accomplish this, XEPs may define
+new [PubSub](#) nodes that supporting channels within a community should subscribe to. Upon receiving a [PubSub](#) notification, the channels should
+react appropriately in regard to the payload.
+
+Care must be taken when storing bare or full JIDs in these [PubSub](#) nodes as to not leaking them. Thus, The recommendations of
+[Persistent Storage of Private Data via PubSub](https://xmpp.org/extensions/xep-0223.html) apply.
+
+### Linking
+
+Each channel must be configured to listen to [PubSub](#) events for every bit of synchronized state it cares about. The actual mechanism for it is out of scope,
+but for MUC, it may include a field in the configuration data form that refers to the community's JID.
+
+Example:
+
+```xml
+<iq from='crone1@shakespeare.lit/desktop'
+    id='create2'
+    to='coven@chat.shakespeare.lit'
+    type='set'>
+  <query xmlns='http://jabber.org/protocol/muc#owner'>
+    <x xmlns='jabber:x:data' type='submit'>
+      <field var='FORM_TYPE'>
+        <value>http://jabber.org/protocol/muc#roomconfig</value>
+      </field>
+      <field var='muc#community_link'>
+        <value>community.example.org</value>
+      </field>
+    </x>
+  </query>
+</iq>
+```
+
+### Banning
+
+Every channel inside a space that supports banning users, should be configured to subscribe to the `proto:urn:xmpp:community:0:ban` [PubSub](#) node. When a JID is put there,
+the supporting channels will be notified of the new ban and SHOULD apply it locally. This node MUST be configured with an access model of whitelist such that only administrators
+can see the bare JIDs of banned users.
+
+Banning a JID:
+
+```xml
+<iq type="set" to="community.example.org">
+  <pubsub xmlns="http://jabber.org/protocol/pubsub">
+    <publish node="proto:urn:xmpp:community:0:ban">
+      <item id="malicious-user@example.org" />
+    </publish>
+  </pubsub>
+</iq>
+```
+
+### Power Levels
+
+Every channel inside a space that supports power levels, like "Moderator", "Admin", and so on, should subscribe to the `proto:urn:xmpp:community:0:power` [PubSub](#) node. Each item in it
+describes a bare JID and its power level. When a notification is received, supporting channels SHOULD keep their internal power levels in sync with the payload.
+
+Making a JID an administrator:
+
+```xml
+<iq type="set" to="community.example.org">
+  <pubsub xmlns="http://jabber.org/protocol/pubsub">
+    <publish node="proto:urn:xmpp:community:0:power">
+      <item id="admin@example.org">
+        <power xmlns="proto:urn:xmpp:community:0:power" level="admin" />
+      </item>
+    </publish>
+  </pubsub>
+</iq>
+```
+
 # Notes
 
 - Using just this XEP, one can implement Gajim-like workspaces: Create a private community on your own bare JID and create a channel group per workspace.
