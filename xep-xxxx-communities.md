@@ -140,6 +140,11 @@ have to.
 </iq>
 ```
 
+# Notes
+
+- Using just this XEP, one can implement Gajim-like workspaces: Create a private community on your own bare JID and create a channel group per workspace.
+  - For pinning, each pinned `<channel />` could get a `<pinned />` child that indicates that it is pinned. The pinned items could then either have a different sorting or the same.
+
 # Info
 
 | Key | Value |
