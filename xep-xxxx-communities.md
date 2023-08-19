@@ -3,7 +3,7 @@
 In different instant messaging services, users have the options to create collections of group chat venues that are logically linked
 together.
 
-This XEP is designed in a modular way, similar to [Mediated Information Exchange]. As such, this XEP only provided the basics for such
+This XEP is designed in a modular way, similar to [Mediated Information Exchange](https://xmpp.org/extensions/xep-0369.html). As such, this XEP only provided the basics for such
 groupings.
 
 ## Design Requirements
@@ -13,11 +13,35 @@ To aid adoption, the following requirements are considered while creating this X
 - Basic communities, i.e. grouped links to other JIDs with additional metadata, should work without server support
 - The protocol should be extensible for future evolution
 
-## Basics
+## Discovery
 
-A community in XMPP is identified by a JID that "owns" the community. This may be a bare JID or a server's JID. This JID must provide
-a [PubSub](https://xmpp.org/extensions/xep-0060.html) service on which the community's metadata is stored. This XEP proposes a couple of basic nodes, but other XEPs may extend
+A community in XMPP is identified by a JID that "owns" the community. This may be a bare JID or a server"s JID. This JID must provide
+a [PubSub](https://xmpp.org/extensions/xep-0060.html) service on which the community"s metadata is stored. This XEP proposes a couple of basic nodes, but other XEPs may extend
 this set and provide custom extensions.
+
+Whether a JID hosts a community is discovery by using a [Service Discovery](https://xmpp.org/extensions/xep-0030.html) items query:
+
+```xml
+<iq type="get"
+    to="community.example.org"
+    id="nodes1">
+  <query xmlns="http://jabber.org/protocol/disco#items"/>
+</iq>
+```
+
+The response MUST contain at least the `proto:urn:xmpp:community:0:info` node:
+
+```xml
+<iq type="result"
+    from="community.example.org"
+    id="nodes1">
+  <query xmlns="http://jabber.org/protocol/disco#items">
+    <item jid="community.example.org" node="proto:urn:xmpp:community:0:info" />
+  </query>
+</iq>
+```
+
+## Basics
 
 A community may be either public, meaning that anyone who knows the JID may join and query information about, or private, meaning that users
 wishing to join MUST be added by an administrator of the community. To accomplish this, public communities SHOULD set all their [PubSub](#) nodes
@@ -26,7 +50,7 @@ administrators to pre-authenticate users such that "invite URLs" to users.
 
 ### Description
 
-A community's information is described by a `<information />` element containing information about the community.
+A community"s information is described by a `<information />` element containing information about the community.
 
 ```xml
 <information xmlns="proto:urn:xmpp:community:0">
